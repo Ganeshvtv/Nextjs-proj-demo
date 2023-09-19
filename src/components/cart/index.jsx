@@ -11,13 +11,18 @@ const CartContext = React.createContext({
 });
 
 const CartProvider = (props) => {
-  const localCart = window.localStorage.getItem('cart') || '[]';
-  const [cartItems, setCartItems] = useState(JSON.parse(localCart));
+  const [cartItems, setCartItems] = useState([]);
   const [products, setProducts] = useState([]);
   const { getProducts } = useApi();
   const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    const localCart = localStorage.getItem('cart') || '[]';
+    setCartItems(JSON.parse(localCart));
+  }, []);
+
   const loadProducts = (limit = 1) => {
+
     setLoading(true);
     getProducts(limit)
       .then((res) => {
